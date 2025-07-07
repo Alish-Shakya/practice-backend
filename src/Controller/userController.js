@@ -34,5 +34,16 @@ export const readUser = async (req, res, next) => {
 
 export const singleUser = async (req, res, next) => {
   try {
-  } catch (error) {}
+    let result = await User.findById(req.params.id, req.body);
+    res.status(200).json({
+      success: true,
+      message: "single user created",
+      data: result,
+    });
+  } catch (error) {
+    res.status(400).json({
+      success: false,
+      message: error.message,
+    });
+  }
 };
