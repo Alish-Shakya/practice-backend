@@ -1,5 +1,7 @@
-import { Mongoose } from "mongoose";
+import { mongoose } from "mongoose";
 
 const connectDB = () => {
-  Mongoose.connect("");
+  mongoose.connect("mongodb://localhost:27017/backend-test");
 };
+
+export default connectDB;
