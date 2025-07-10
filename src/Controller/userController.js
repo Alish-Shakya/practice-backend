@@ -47,3 +47,21 @@ export const singleUser = async (req, res, next) => {
     });
   }
 };
+
+export const updateUser = async (req, res, next) => {
+  try {
+    let result = await User.findByIdAndUpdate(req.params.id, req.body, {
+      new: true,
+    });
+    res.status(200).json({
+      success: true,
+      message: "data updated successfully",
+      data: result,
+    });
+  } catch (error) {
+    res.status(400).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
