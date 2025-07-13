@@ -25,3 +25,4 @@ create a database and copy the connection string link and paste it on the functi
 
 
 "npm i bcrypt" for hashing password
+"npm i jsonwebtoken" FOR TOKEN GENERATE
