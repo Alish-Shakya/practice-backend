@@ -34,7 +34,7 @@ export const readUser = async (req, res, next) => {
 
 export const singleUser = async (req, res, next) => {
   try {
-    let result = await User.findById(req.params.id, req.body);
+    let result = await User.findById(req.params.id);
     res.status(200).json({
       success: true,
       message: "single user created",
