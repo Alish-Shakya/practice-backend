@@ -5,6 +5,7 @@ import connectDB from "./src/ConnectDB/connectDB.js";
 import cors from "cors";
 import contactRouter from "./src/Route/contactRoute.js";
 import schoolRouter from "./src/Route/schoolRouter.js";
+import webUserRouter from "./src/Route/webUserRoute.js";
 
 const app = express();
 const port = 4000;
@@ -18,7 +19,7 @@ connectDB();
 app.use("/user", userRouter);
 app.use("/school", schoolRouter);
 app.use("/", contactRouter);
-
+app.use("/webUser", webUserRouter);
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`);
 });
