@@ -58,8 +58,11 @@ export const register = async (req, res, nest) => {
 export const verifyEmail = async (req, res, next) => {
   try {
     let tokenString = req.headers.authorization;
+    // console.log(tokenString);
     let tokenArray = tokenString.split(" ");
+    // console.log(tokenArray);
     let token = tokenArray[1];
+    // console.log(token);
 
     let user = await jwt.verify(token, secretKey);
 
@@ -72,6 +75,51 @@ export const verifyEmail = async (req, res, next) => {
       success: true,
       message: "user verified successfully",
       result: result,
+    });
+  } catch (error) {
+    res.status(400).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
+
+export const login = async (req, res, next) => {
+  try {
+    let email = req.body.email;
+    let password = req.body.password;
+
+    let user = await WebUser.findOne({ email: email });
+
+    if (!user) {
+      throw new Error("User not found");
+    }
+
+    if (!user.isVerifyEmail) {
+      throw new Error(" user not verified");
+    }
+
+    let isValidPassword = await bcrypt.compare(password, user.password);
+
+    if (!isValidPassword) {
+      throw new Error("Invalid Credentials");
+    }
+
+    let infoObj = {
+      _id: user._id,
+    };
+
+    let expiryInfo = {
+      expiresIn: "365d",
+    };
+
+    let token = await jwt.sign(infoObj, secretKey, expiryInfo);
+
+    res.status(200).json({
+      success: true,
+      message: "user login successfully",
+      result: user,
+      token: token,
     });
   } catch (error) {
     res.status(400).json({
