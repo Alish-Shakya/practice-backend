@@ -26,7 +26,7 @@ const webUserSchema = new mongoose.Schema({
     type: Number,
     require: true,
   },
-  isVerifyEmail: {
+  isVerifiedEmail: {
     type: Boolean,
     require: true,
   },

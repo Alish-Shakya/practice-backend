@@ -4,7 +4,7 @@ import jwt from "jsonwebtoken";
 import { sendEmail } from "../Utils/sendEmail.js";
 import { WebUser } from "../Model/model.js";
 
-export const register = async (req, res, nest) => {
+export const register = async (req, res, next) => {
   try {
     let data = req.body;
     let password = data.password;
@@ -19,6 +19,7 @@ export const register = async (req, res, nest) => {
     };
 
     let result = await WebUser.create(data);
+
     let infoObj = {
       _id: result._id,
     };
@@ -88,15 +89,15 @@ export const login = async (req, res, next) => {
   try {
     let email = req.body.email;
     let password = req.body.password;
-
     let user = await WebUser.findOne({ email: email });
+    // console.log(user);
 
     if (!user) {
       throw new Error("User not found");
     }
 
-    if (!user.isVerifyEmail) {
-      throw new Error(" user not verified");
+    if (!user.isVerifiedEmail) {
+      throw new Error("Email not verified");
     }
 
     let isValidPassword = await bcrypt.compare(password, user.password);
@@ -117,9 +118,26 @@ export const login = async (req, res, next) => {
 
     res.status(200).json({
       success: true,
-      message: "user login successfully",
+      message: "web user login successfully",
       result: user,
       token: token,
+    });
+  } catch (error) {
+    res.status(400).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
+
+export const myProfile = async (req, res, next) => {
+  try {
+    let id = req._id;
+    let result = await WebUser.findById(id);
+    res.status(200).json({
+      success: true,
+      message: "webuser profile read successfully",
+      result: result,
     });
   } catch (error) {
     res.status(400).json({
