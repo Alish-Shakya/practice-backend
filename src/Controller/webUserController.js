@@ -167,3 +167,36 @@ export const updateProfile = async (req, res, next) => {
     });
   }
 };
+
+export const updatePassword = async (req, res, next) => {
+  try {
+    let id = req._id;
+    let oldPassword = req.body.oldPassword;
+    let newPassword = req.body.newPassword;
+
+    let user = await WebUser.findById(id);
+    let hashedPassword = user.password;
+
+    let isValidPassword = await bcrypt.compare(oldPassword, hashedPassword);
+
+    if (isValidPassword) {
+      let newHashedPassword = await bcrypt.hash(newPassword, 10);
+
+      let result = await WebUser.findByIdAndUpdate(
+        id,
+        { password: newHashedPassword },
+        { new: true }
+      );
+      res.status(200).json({
+        success: true,
+        message: "Password updated Successfully",
+        result: result,
+      });
+    }
+  } catch (error) {
+    res.status(400).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
