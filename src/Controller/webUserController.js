@@ -146,3 +146,24 @@ export const myProfile = async (req, res, next) => {
     });
   }
 };
+
+export const updateProfile = async (req, res, next) => {
+  try {
+    let id = req._id;
+    let data = req.body;
+    delete data.email;
+    delete data.password;
+
+    let result = await WebUser.findByIdAndUpdate(id, data, { new: true });
+    res.status(200).json({
+      success: true,
+      message: "webUser updated successfullt",
+      data: result,
+    });
+  } catch (error) {
+    res.status(400).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};

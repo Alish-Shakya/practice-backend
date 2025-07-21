@@ -3,6 +3,7 @@ import {
   login,
   myProfile,
   register,
+  updateProfile,
   verifyEmail,
 } from "../Controller/webUserController.js";
 import webUserSchema from "../Schema/webUserSchema.js";
@@ -15,4 +16,5 @@ webUserRouter.route("/verifyEmail").get(verifyEmail);
 webUserRouter.route("/login").post(login);
 
 webUserRouter.route("/profile").get(isAuthenticated, myProfile);
+webUserRouter.route("/updateProfile").patch(isAuthenticated, updateProfile);
 export default webUserRouter;
