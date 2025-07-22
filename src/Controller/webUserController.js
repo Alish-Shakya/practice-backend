@@ -200,3 +200,45 @@ export const updatePassword = async (req, res, next) => {
     });
   }
 };
+
+export const forgotPasssword = async (req, res, next) => {
+  try {
+    let email = req.body.email;
+
+    let user = await WebUser.findOne({ email: email });
+
+    if (user) {
+      let infoObj = {
+        _id: user._id,
+      };
+
+      let expiryInfo = {
+        expiresIn: "1h",
+      };
+
+      let token = await jwt.sign(infoObj, secretKey, expiryInfo);
+
+      await sendEmail({
+        to: user.email,
+        subject: "Reset Password",
+        html: `
+        <h1>Password Reset </h1>
+        <p> Click this link to reset your password </p>
+        <a herf = "http://localhost:4000/webUser/reset-password?token=${token}">
+                  "http://localhost:4000/webUser/reset-password?token=${token}"
+        </a>
+        `,
+      });
+      res.status(200).json({
+        success: true,
+        message: "password link has sent to your email",
+        result: user,
+      });
+    }
+  } catch (error) {
+    res.status(400).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};

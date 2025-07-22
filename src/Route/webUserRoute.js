@@ -1,5 +1,6 @@
 import { Router } from "express";
 import {
+  forgotPasssword,
   login,
   myProfile,
   register,
@@ -18,4 +19,5 @@ webUserRouter.route("/login").post(login);
 webUserRouter.route("/profile").get(isAuthenticated, myProfile);
 webUserRouter.route("/updateProfile").patch(isAuthenticated, updateProfile);
 webUserRouter.route("/updatePassword").patch(isAuthenticated, updatePassword);
+webUserRouter.route("/forgotPassword").post(forgotPasssword);
 export default webUserRouter;
